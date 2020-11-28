@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bernold/Desktop/TEC/Operativos/Progra 2/Iniciador/main.c
+sys/types.h
+-
+sys/ipc.h
+-
+sys/shm.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+

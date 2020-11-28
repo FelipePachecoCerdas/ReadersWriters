@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho/main.c
+stdio.h
+-
+pthread.h
+-
+unistd.h
+-
+stdlib.h
+-
+sys/types.h
+-
+sys/ipc.h
+-
+sys/shm.h
+-
+string.h
+-
+
