@@ -5,12 +5,24 @@
 #include <stdlib.h>
 #include  <string.h>
 
-int main() {
-    int ShmID;
-    printf( "Ingrese el ID de la memoria compartida: ");
-    scanf("%d",  &ShmID);
+struct InfoBasica {
+    int MC_Id, cantLineas;
+};
 
-    shmctl(ShmID, IPC_RMID, NULL);
+int main() {
+    int MC_Ctl_Id;
+    FILE * fp = fopen ("/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt","r");
+    fscanf(fp, "%i", &MC_Ctl_Id);
+    fclose (fp);
+
+    char * MC_Ctl_ptr = shmat(MC_Ctl_Id, NULL, 0);
+    struct InfoBasica* infoBasica = (struct InfoBasica*) MC_Ctl_ptr;
+    //printf("SOY %i %i \n", infoBasica->MC_Id, infoBasica->cantLineas);
+
+    int MC_Id = infoBasica->MC_Id;
+
+    shmctl(MC_Id, IPC_RMID, NULL);
+    shmctl(MC_Ctl_Id, IPC_RMID, NULL);
     printf("Server has removed its shared memory...\n");
     printf("Server exits...\n");
     exit(0);

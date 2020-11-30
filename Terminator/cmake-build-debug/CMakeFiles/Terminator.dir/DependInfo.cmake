@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/bernold/Desktop/TEC/Operativos/Progra 2/Terminator/main.c" "/home/bernold/Desktop/TEC/Operativos/Progra 2/Terminator/cmake-build-debug/CMakeFiles/Terminator.dir/main.c.o"
+  "/home/felipe/Desktop/Kraken/ReadersWriters/Terminator/main.c" "/home/felipe/Desktop/Kraken/ReadersWriters/Terminator/cmake-build-debug/CMakeFiles/Terminator.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
