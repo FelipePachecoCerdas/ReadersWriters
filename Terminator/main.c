@@ -4,14 +4,18 @@
 #include  <stdio.h>
 #include <stdlib.h>
 #include  <string.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
 
 struct InfoBasica {
-    int MC_Id, cantLineas;
+    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
+    sem_t semControl, semEgoista, semPrimerLector;
 };
-
 int main() {
     int MC_Ctl_Id;
-    FILE * fp = fopen ("/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt","r");
+    FILE * fp = fopen (ARCHIVO_DE_CONTROL,"r");
     fscanf(fp, "%i", &MC_Ctl_Id);
     fclose (fp);
 
@@ -20,6 +24,9 @@ int main() {
     //printf("SOY %i %i \n", infoBasica->MC_Id, infoBasica->cantLineas);
 
     int MC_Id = infoBasica->MC_Id;
+
+    infoBasica->enJuego = 0;
+    sleep(3);
 
     shmctl(MC_Id, IPC_RMID, NULL);
     shmctl(MC_Ctl_Id, IPC_RMID, NULL);

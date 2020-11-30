@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/felipe/Desktop/Kraken/ReadersWriters/Iniciador/main.c
+/home/jdtm23/Documents/ReadersWriters/Iniciador/main.c
 sys/types.h
 -
 sys/ipc.h
@@ -18,5 +18,11 @@ stdio.h
 stdlib.h
 -
 string.h
+-
+semaphore.h
+-
+pthread.h
+-
+zconf.h
 -
 

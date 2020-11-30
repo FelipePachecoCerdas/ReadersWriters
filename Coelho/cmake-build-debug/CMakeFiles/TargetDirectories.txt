@@ -1,3 +1,0 @@
-/home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho/cmake-build-debug/CMakeFiles/Coelho.dir

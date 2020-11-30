@@ -6,12 +6,14 @@
 
 #IncludeRegexTransform: 
 
-/home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho/main.c
+/home/jdtm23/Documents/ReadersWriters/Escritor/main.c
 stdio.h
 -
 pthread.h
 -
 unistd.h
+-
+stdio.h
 -
 stdlib.h
 -
@@ -21,6 +23,8 @@ sys/ipc.h
 -
 sys/shm.h
 -
-string.h
+memory.h
+-
+semaphore.h
 -
 

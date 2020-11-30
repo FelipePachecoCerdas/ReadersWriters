@@ -4,7 +4,11 @@
 #include  <stdio.h>
 #include <stdlib.h>
 #include  <string.h>
+#include <semaphore.h>
+#include <pthread.h>
+#include <zconf.h>
 
+char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
 int TAM_LINEA = 100;
 /*
 struct Mensaje {
@@ -15,7 +19,13 @@ struct Mensaje {
 };*/
 
 struct InfoBasica {
-    int MC_Id, cantLineas;
+    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
+    sem_t semControl, semEgoista, semPrimerLector;
+};
+
+struct HiloProceso{
+    pthread_t pid;
+    char estado;
 };
 
 int main() {
@@ -38,28 +48,48 @@ int main() {
         MC_ptr[i] = '\0';
     }
 
-    char * mem = MC_ptr;
-    for (int i = 0; i < cantLineas; i++) {
+    char * mem = MC_ptr+100;
+    for (int i = 1; i < cantLineas; i+=2) {
         char * linea = malloc(100);
         snprintf(linea, 100, "Hola soy %i", i);
 
         memcpy(mem, linea,  strlen(linea));
-        mem += TAM_LINEA;
+        mem += TAM_LINEA*2;
     }
 
     key_t MC_Ctl_Llave = ftok(".", 'HOLA');
-    int MC_Ctl_Id = shmget(MC_Ctl_Llave, 1000, IPC_CREAT | 0666);
+    int MC_Ctl_Id = shmget(MC_Ctl_Llave, sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 300, IPC_CREAT | 0666);
     char * MC_Ctl_ptr = shmat(MC_Ctl_Id, NULL, 0);
 
     struct InfoBasica* infoBasica = (struct InfoBasica*) MC_Ctl_ptr;
     infoBasica->MC_Id = MC_Id;
     infoBasica->cantLineas = cantLineas;
+    infoBasica->acumuladoEgoistas = 0;
+    infoBasica->enJuego = 1;
+    sem_init(&infoBasica->semControl, 1, 1);
+    sem_init(&infoBasica->semEgoista, 1, 1);
+    sem_init(&infoBasica->semPrimerLector, 1, 1);
 
-    FILE * fp = fopen ("/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt","w");
+    FILE * fp = fopen (ARCHIVO_DE_CONTROL,"w");
     fprintf(fp, "%i", MC_Ctl_Id);
     fclose (fp);
 
     printf("\nShared CONTROL memory id is: %d\n", MC_Ctl_Id);
+    int value;
+    while (1) {
+        sem_getvalue(&infoBasica->semControl,&value);
+        printf("\n*LINEAS %i* \n", value);
+        /*
+        char *mem = MC_ptr;
+        for (int j = 0; j < cantLineas; j++) {
+            printf("%s\n",mem);
+            mem += TAM_LINEA;
+        }*/
+        usleep(1000);
+    }
 
     return 0;
 }
+
+
+

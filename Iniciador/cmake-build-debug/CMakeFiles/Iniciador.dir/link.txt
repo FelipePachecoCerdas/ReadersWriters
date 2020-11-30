@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/Iniciador.dir/main.c.o  -o Iniciador 
+/usr/bin/cc -g   CMakeFiles/Iniciador.dir/main.c.o  -o Iniciador  -pthread 

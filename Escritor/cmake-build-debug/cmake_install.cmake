@@ -1,4 +1,4 @@
-# Install script for directory: /home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho
+# Install script for directory: /home/jdtm23/Documents/ReadersWriters/Escritor
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/bernold/Desktop/TEC/Operativos/Progra 2/Coelho/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/jdtm23/Documents/ReadersWriters/Escritor/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/Terminator.dir/main.c.o  -o Terminator 
+/usr/bin/cc -g   CMakeFiles/Terminator.dir/main.c.o  -o Terminator  -pthread 

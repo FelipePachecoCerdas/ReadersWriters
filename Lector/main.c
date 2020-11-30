@@ -7,50 +7,93 @@
 #include  <sys/ipc.h>
 #include  <sys/shm.h>
 #include <memory.h>
+#include <semaphore.h>
 
-int TAM_LINEA = 100, TRUE = 1, FALSE = 0;
+int TAM_LINEA = 100, TRUE = 1, FALSE = 0, contadorLectores = 0, primerLector;
+char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
+sem_t semLectura;
 
 struct InfoBasica {
-    int MC_Id, cantLineas;
+    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
+    sem_t semControl, semEgoista, semPrimerLector;
 };
+
+struct HiloProceso{
+    pthread_t pid;
+    char estado;
+};
+
 struct InfoBasica* infoBasica;
+struct HiloProceso* procesosLectores;
 
 void *thread_function(void *);
 
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
-int durMimir, durLeer, numLectores;
+int durDormir, durLeer, numLectores;
 char * MC_ptr;
 
 
-void leer() {
-    char *mem, linea = malloc(TAM_LINEA);;
+void leer(int i) {
+    procesosLectores[i].pid = pthread_self();
+
+    char *mem, *linea = malloc(TAM_LINEA);
     int numLinea = 0, numLineaResp;
 
     do {
-        numLineaResp = numLinea;
+        procesosLectores[i].estado = 'B';
+        sem_wait(&infoBasica->semPrimerLector);
+        sem_wait(&semLectura);
+        contadorLectores++;
+        if(contadorLectores == 1) {
+            primerLector = i;
+            sem_wait(&infoBasica->semControl);
+        }
+        sem_post(&semLectura);
+        sem_post(&infoBasica->semPrimerLector);
 
-        for (; numLinea != numLineaResp; numLinea = (numLinea + 1) % infoBasica->cantLineas) {
+        //region critica
+        numLineaResp = numLinea;
+        procesosLectores[i].estado = 'L';
+
+        do {
             mem = MC_ptr + (TAM_LINEA * numLinea);
-            memcpy(mem, linea, TAM_LINEA);
-            if (!strcmp(linea, ""))
+            memcpy(linea,mem , TAM_LINEA);
+
+            if (strcmp(linea, ""))
                 break;
+            numLinea = (numLinea + 1) % infoBasica->cantLineas;
+        } while (numLinea != numLineaResp);
+
+        if (numLinea == numLineaResp && !strcmp(linea, ""))
+            printf("Soy el thread %lu y no tengo nada que leer porque el archivo esta vacio\n", pthread_self());
+        else {
+            sleep(durLeer);
+            printf("Soy el thread %lu y leo: %s\n", pthread_self(), linea);
         }
 
-        if (numLinea == numLineaResp)
-            printf("Soy el thread %lu y no tengo nada que leer\n", pthread_self());
-        else
-            printf("Soy el thread %lu y leo: %s\n", pthread_self(), linea);
+        sem_wait(&semLectura);
+        contadorLectores--;
+        if(primerLector == i)
+            sem_wait(&infoBasica->semPrimerLector);
+        if(contadorLectores==0)
+            sem_post(&infoBasica->semControl);
+        sem_post(&semLectura);
 
-        sleep(durLeer);
+        procesosLectores[i].estado = 'D';
+        sleep(durDormir);
+
+        numLinea = (numLinea + 1) % infoBasica->cantLineas;
     } while (TRUE);
 }
 
 int main() {
     int MC_Ctl_Id;
-    FILE * fp = fopen ("/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt","r");
+    FILE * fp = fopen (ARCHIVO_DE_CONTROL,"r");
     fscanf(fp, "%i", &MC_Ctl_Id);
     fclose (fp);
+
+    sem_init(&semLectura,1,1);
 
     char * MC_Ctl_ptr = shmat(MC_Ctl_Id, NULL, 0);
     infoBasica = (struct InfoBasica*) MC_Ctl_ptr;
@@ -68,36 +111,24 @@ int main() {
     printf( "Ingrese la cantidad de lectores deseados: ");
     scanf("%d",  &numLectores);
     printf( "Ingrese la cantidad  de segundos para dormir: ");
-    scanf("%d",  &durMimir);
+    scanf("%d",  &durDormir);
     printf( "Ingrese la cantidad  de segundos para leer: ");
     scanf("%d",  &durLeer);
 
-    pthread_t lectores[numLectores];
+    infoBasica->cantLectores = numLectores;
+    procesosLectores = MC_Ctl_ptr + sizeof(struct InfoBasica);
+
+    pthread_t hilosLectores[numLectores];
     for (int i = 0; i < numLectores; i++) {
-        pthread_create(&lectores[i], NULL, leer, NULL );
+        pthread_create(&hilosLectores[i], NULL, leer, i);
         sleep(1);
     }
+    while(infoBasica->enJuego)
+        sleep(1);
 
     for (int i = 0; i < numLectores; i++) {
-        pthread_join(lectores[i], NULL );
+        pthread_cancel(hilosLectores[i]);
     }
 
 
 }
-
-
-/*
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
-void *thread_function(void *dummyPtr)
-{
-    while(1){
-        printf("Hello from new thread - got %d\n", pthread_self());
-        pthread_mutex_lock( &mutex1 );
-        //Aqui estaria la sección critica
-        pthread_mutex_unlock( &mutex1 );
-        sleep(mimir);
-    }
-}
-#pragma clang diagnostic pop
-*/
