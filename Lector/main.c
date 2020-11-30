@@ -10,7 +10,7 @@
 #include <semaphore.h>
 
 int TAM_LINEA = 100, TRUE = 1, FALSE = 0, contadorLectores = 0, primerLector;
-char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
+char * ARCHIVO_DE_CONTROL="/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
 sem_t semLectura;
 
 struct InfoBasica {
@@ -33,6 +33,15 @@ pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int durDormir, durLeer, numLectores;
 char * MC_ptr;
 
+char *getTime() {
+    char *s = malloc(100);
+    time_t tiempo;
+    struct tm * infoTiempo;
+    time( &tiempo );
+    infoTiempo = localtime( &tiempo );
+    snprintf(s, 100, "%02d:%02d:%02d", infoTiempo->tm_hour, infoTiempo->tm_min, infoTiempo->tm_sec);
+    return s;
+}
 
 void leer(int i) {
     procesosLectores[i].pid = pthread_self();
@@ -42,7 +51,7 @@ void leer(int i) {
 
     do {
         procesosLectores[i].estado = 'B';
-        sem_wait(&infoBasica->semPrimerLector);
+        //sem_wait(&infoBasica->semPrimerLector);
         sem_wait(&semLectura);
         contadorLectores++;
         if(contadorLectores == 1) {
@@ -50,7 +59,7 @@ void leer(int i) {
             sem_wait(&infoBasica->semControl);
         }
         sem_post(&semLectura);
-        sem_post(&infoBasica->semPrimerLector);
+        //sem_post(&infoBasica->semPrimerLector);
 
         //region critica
         numLineaResp = numLinea;
@@ -65,17 +74,21 @@ void leer(int i) {
             numLinea = (numLinea + 1) % infoBasica->cantLineas;
         } while (numLinea != numLineaResp);
 
+        char* mensajeBitacora = malloc(1000);
+
         if (numLinea == numLineaResp && !strcmp(linea, ""))
-            printf("Soy el thread %lu y no tengo nada que leer porque el archivo esta vacio\n", pthread_self());
+            snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Lector) - No lee porque el archivo esta vacio\n", getTime(), pthread_self());
         else {
             sleep(durLeer);
-            printf("Soy el thread %lu y leo: %s\n", pthread_self(), linea);
+            snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Lector) - Lee \"%s\"\n", getTime(), pthread_self(), linea);
         }
+        printf("%s", mensajeBitacora);
+        // ESCBE EN BITACORA
 
         sem_wait(&semLectura);
         contadorLectores--;
-        if(primerLector == i)
-            sem_wait(&infoBasica->semPrimerLector);
+        if(primerLector == i) 1;
+            //sem_wait(&infoBasica->semPrimerLector);
         if(contadorLectores==0)
             sem_post(&infoBasica->semControl);
         sem_post(&semLectura);
@@ -121,7 +134,7 @@ int main() {
     pthread_t hilosLectores[numLectores];
     for (int i = 0; i < numLectores; i++) {
         pthread_create(&hilosLectores[i], NULL, leer, i);
-        sleep(1);
+        sleep(1); // NNOOOOOOOOOOOOOOOOOOOOO VAAAAAAAAAAAAAAA
     }
     while(infoBasica->enJuego)
         sleep(1);

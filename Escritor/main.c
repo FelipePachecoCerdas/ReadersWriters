@@ -10,7 +10,7 @@
 #include <semaphore.h>
 
 int TAM_LINEA = 100, TRUE = 1, FALSE = 0;
-char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
+char * ARCHIVO_DE_CONTROL="/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
 
 struct InfoBasica {
     int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
@@ -32,6 +32,15 @@ pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int durDormir, durEscribir, numEscritores;
 char * MC_ptr;
 
+char *getTime() {
+    char *s = malloc(100);
+    time_t tiempo;
+    struct tm * infoTiempo;
+    time( &tiempo );
+    infoTiempo = localtime( &tiempo );
+    snprintf(s, 100, "%02d:%02d:%02d", infoTiempo->tm_hour, infoTiempo->tm_min, infoTiempo->tm_sec);
+    return s;
+}
 
 void escribir(int i) {
     procesosEscritores[i].pid = pthread_self();
@@ -60,9 +69,10 @@ void escribir(int i) {
                 break;
             numLinea = (numLinea + 1) % infoBasica->cantLineas;
         } while (numLinea != numLineaResp);
+        char *mensajeBitacora = malloc(1000);
 
         if (numLinea == numLineaResp && strcmp(linea, ""))
-            printf("Soy el thread %lu y no puedo escribir porque el archivo esta lleno\n", pthread_self());
+            snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Escritor) - No escribe porque el archivo esta lleno\n", getTime(), pthread_self());
         else {
             sleep(durEscribir);
             time_t t = time(NULL);
@@ -70,10 +80,11 @@ void escribir(int i) {
             char * fecha = asctime(tm);
             fecha[strlen(fecha)-1] = '\0';
 
-            snprintf(linea,100,"PID: %lu FECHA: %s LINEA: %i",pthread_self(),fecha,numLinea);
+            snprintf(linea,100,"PID: %lu | FECHA: %s | LINEA: %i",pthread_self(),fecha,numLinea);
             memcpy(mem,linea,TAM_LINEA);
-            printf("Soy el thread %lu y escribo: %s\n", pthread_self(), linea);
+            snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Escritor) - Escribe \"%s\"\n", getTime(), pthread_self(), linea);
         }
+        printf("%s", mensajeBitacora);
 
         sem_post(&infoBasica->semControl);
 
@@ -111,7 +122,7 @@ int main() {
     scanf("%d",  &durEscribir);
 
     infoBasica->cantEscritores = numEscritores;
-    procesosEscritores = MC_Ctl_ptr + sizeof(struct InfoBasica);
+    procesosEscritores = MC_Ctl_ptr + sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 100;
 
     pthread_t hilosEscritores[numEscritores];
     for (int i = 0; i < numEscritores; i++) {

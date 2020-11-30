@@ -8,7 +8,7 @@
 #include <pthread.h>
 #include <zconf.h>
 
-char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
+char * ARCHIVO_DE_CONTROL="/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
 int TAM_LINEA = 100;
 /*
 struct Mensaje {
@@ -41,7 +41,7 @@ int main() {
         exit(1);
     }
 
-    printf( "Shared memory id is: %d", MC_Id);
+    printf( "\nLa ID de la memoria compartida (archivo) es: %d\n", MC_Id);
 
     char * MC_ptr = shmat(MC_Id, NULL, 0);
     for (int i = 0; i < TAM_LINEA * cantLineas; i++) {
@@ -69,27 +69,15 @@ int main() {
     sem_init(&infoBasica->semControl, 1, 1);
     sem_init(&infoBasica->semEgoista, 1, 1);
     sem_init(&infoBasica->semPrimerLector, 1, 1);
+    infoBasica->cantEgoistas = infoBasica->cantEscritores = infoBasica->cantLectores = 0;
 
     FILE * fp = fopen (ARCHIVO_DE_CONTROL,"w");
     fprintf(fp, "%i", MC_Ctl_Id);
     fclose (fp);
 
-    printf("\nShared CONTROL memory id is: %d\n", MC_Ctl_Id);
-    int value;
-    while (1) {
-        sem_getvalue(&infoBasica->semControl,&value);
-        printf("\n*LINEAS %i* \n", value);
-        /*
-        char *mem = MC_ptr;
-        for (int j = 0; j < cantLineas; j++) {
-            printf("%s\n",mem);
-            mem += TAM_LINEA;
-        }*/
-        usleep(1000);
-    }
+    printf("\nLa ID de la memoria compartida (control) es: %d\n", MC_Ctl_Id);
 
     return 0;
 }
-
 
 

@@ -1,0 +1,3 @@
+/home/felipe/Desktop/Kraken/ReadersWriters/JamesBond/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/felipe/Desktop/Kraken/ReadersWriters/JamesBond/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/felipe/Desktop/Kraken/ReadersWriters/JamesBond/cmake-build-debug/CMakeFiles/JamesBond.dir

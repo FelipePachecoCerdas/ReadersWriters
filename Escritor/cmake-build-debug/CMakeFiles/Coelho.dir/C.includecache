@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/jdtm23/Documents/ReadersWriters/Escritor/main.c
+/home/felipe/Desktop/Kraken/ReadersWriters/Escritor/main.c
 stdio.h
 -
 pthread.h
