@@ -1,0 +1,127 @@
+[16:30:54] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:54] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:54] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:54] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:56] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:56] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:56] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:56] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:58] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:58] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:58] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:30:58] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:00] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:00] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:00] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:00] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:02] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:02] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:02] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:02] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:04] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:04] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:04] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:04] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:06] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:06] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:06] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:06] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:08] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:08] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:08] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:08] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:10] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:10] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:10] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:10] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:12] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:12] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:12] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:12] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:14] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:14] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:14] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:14] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:21] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:31:21 2020 | LINEA: 0"
+[16:31:23] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:31:21 2020 | LINEA: 0"
+[16:31:23] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:23] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:23] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:25] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:25] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:25] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:25] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:27] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:27] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:27] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:27] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:35] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:31:35 2020 | LINEA: 1"
+[16:31:37] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:31:35 2020 | LINEA: 1"
+[16:31:37] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:37] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:37] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:39] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:39] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:39] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:39] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:41] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:41] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:41] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:41] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:49] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:31:49 2020 | LINEA: 2"
+[16:31:51] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:31:49 2020 | LINEA: 2"
+[16:31:51] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:51] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:51] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:53] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:53] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:53] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:53] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:55] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:55] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:55] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:31:55] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:03] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:03 2020 | LINEA: 3"
+[16:32:05] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:03 2020 | LINEA: 3"
+[16:32:05] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:05] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:05] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:07] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:07] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:07] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:07] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:09] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:09] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:09] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:09] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:17] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:17 2020 | LINEA: 4"
+[16:32:19] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:17 2020 | LINEA: 4"
+[16:32:19] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:19] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:19] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:21] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:21] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:21] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:21] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:23] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:23] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:23] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:23] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:31] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:31 2020 | LINEA: 5"
+[16:32:33] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:31 2020 | LINEA: 5"
+[16:32:33] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:33] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:33] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:35] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:35] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:35] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:35] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:37] PID: 140482120120064 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:37] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:37] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:37] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:45] PID: 140518778087168 (Escritor) - Escribe "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:45 2020 | LINEA: 6"
+[16:32:47] PID: 140482120120064 (Lector Egoista) - Lee y elimina "PID: 140518778087168 | FECHA: Mon Nov 30 16:32:45 2020 | LINEA: 6"
+[16:32:47] PID: 140482103334656 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:47] PID: 140482094941952 (Lector Egoista) - No lee porque el archivo esta vacio
+[16:32:47] PID: 140482111727360 (Lector Egoista) - No lee porque el archivo esta vacio

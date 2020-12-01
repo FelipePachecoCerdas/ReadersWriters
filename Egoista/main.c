@@ -1,66 +1,78 @@
-#include <stdio.h>
-#include <pthread.h>
-#include <unistd.h>
-#include  <stdio.h>
-#include  <stdlib.h>
-#include  <sys/types.h>
-#include  <sys/ipc.h>
-#include  <sys/shm.h>
-#include <memory.h>
-#include <semaphore.h>
-
-int TAM_LINEA = 100, TRUE = 1, FALSE = 0;
-char * ARCHIVO_DE_CONTROL="/home/jdtm23/Documents/ReadersWriters/idCtl.txt";
-
-struct InfoBasica {
-    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
-    sem_t semControl, semEgoista, semPrimerLector;
-};
-
-struct HiloProceso{
-    pthread_t pid;
-    char estado;
-};
+#include "../util.c"
 
 struct InfoBasica* infoBasica;
-struct HiloProceso* procesosLectores;
+struct HiloProceso* procesosEgoistas;
 
-void *thread_function(void *);
-
-pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
-
-int durDormir, durLeer, numLectores;
+int durDormir, durLeerEgoista, numEgoistas;
 char * MC_ptr;
 
+sem_t semLecturaEgoista;
 
-void leer(int i) {
-    procesosLectores[i].pid = pthread_self();
+void leerEgoista(int i) {
+    procesosEgoistas[i].pid = pthread_self();
 
     char *mem, *linea = malloc(TAM_LINEA);
-    int numLinea = 0, numLineaResp;
+    int numLinea = 0, numLineaResp, valorPrimerLector, contadorNoEgoistas;
 
     do {
-        procesosLectores[i].estado = 'B';
-        //wait
-        numLineaResp = numLinea;
-        procesosLectores[i].estado = 'L';
-        sleep(durLeer);
+        procesosEgoistas[i].estado = 'B';
+        sem_wait(&semLecturaEgoista);
+        sem_getvalue(&infoBasica->semContadorNoEgoistas,&contadorNoEgoistas);
+        if(infoBasica->acumuladoEgoistas>=3 && contadorNoEgoistas!=101) {
+            sem_wait(&infoBasica->semEgoista);
+            sem_post(&infoBasica->semEgoista);
+        }
+        sem_wait(&infoBasica->semContadorModificacion);
+        sem_wait(&infoBasica->semControl);
 
+        //region critica
+        sem_post(&infoBasica->semContadorModificacion);
+        if(infoBasica->primerLectorTermino) {
+            infoBasica->primerLectorTermino = FALSE;
+            sem_post(&infoBasica->semPrimerLector);
+        }
+        numLineaResp = numLinea;
+        procesosEgoistas[i].estado = 'X';
+
+        int lineasLlenas[infoBasica->cantLineas], cantLineasLlenas = 0;
         do {
             mem = MC_ptr + (TAM_LINEA * numLinea);
             memcpy(linea,mem , TAM_LINEA);
-            printf("Esta es la linea: %s %i\n",linea,numLinea);
-            if (strcmp(linea, ""))
-                break;
+
+            if (strcmp(linea, "")) {
+                lineasLlenas[cantLineasLlenas++] = numLinea;
+            }
             numLinea = (numLinea + 1) % infoBasica->cantLineas;
         } while (numLinea != numLineaResp);
 
-        if (numLinea == numLineaResp && !strcmp(linea, ""))
-            printf("Soy el thread %lu y no tengo nada que leer\n", pthread_self());
-        else
-            printf("Soy el thread %lu y leo: %s\n", pthread_self(), linea);
+        char *mensajeBitacora = malloc(1000);
 
-        procesosLectores[i].estado = 'D';
+        if (!cantLineasLlenas) {
+            snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Lector Egoista) - No lee porque el archivo esta vacio\n", getTime(), pthread_self());
+        } else {
+
+            int lineaRandom = rand() % cantLineasLlenas;
+            mem = MC_ptr + (TAM_LINEA * lineasLlenas[lineaRandom]);
+            memcpy(linea,mem , TAM_LINEA);
+
+            sleep(durLeerEgoista);
+            snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Lector Egoista) - Lee y elimina \"%s\"\n", getTime(), pthread_self(), linea);
+
+            for (int s = 0; s < TAM_LINEA; s++) *mem++ = '\0';
+        }
+        printf("%s", mensajeBitacora);
+
+        FILE * fp = fopen (ARCHIVO_BITACORA,"a");
+        fprintf(fp, "%s", mensajeBitacora);
+        fclose (fp);
+
+        infoBasica->acumuladoEgoistas++;
+        if(infoBasica->acumuladoEgoistas == 3)
+            sem_wait(&infoBasica->semEgoista);
+
+        sem_post(&infoBasica->semControl);
+        sem_post(&semLecturaEgoista);
+        procesosEgoistas[i].estado = 'D';
         sleep(durDormir);
 
         numLinea = (numLinea + 1) % infoBasica->cantLineas;
@@ -86,26 +98,29 @@ int main() {
     }
     printf("   Client has attached the shared memory...\n");
 
-    printf( "Ingrese la cantidad de lectores deseados: ");
-    scanf("%d",  &numLectores);
+    printf( "Ingrese la cantidad de lectores egoistas deseados: ");
+    scanf("%d",  &numEgoistas);
     printf( "Ingrese la cantidad  de segundos para dormir: ");
     scanf("%d",  &durDormir);
     printf( "Ingrese la cantidad  de segundos para leer: ");
-    scanf("%d",  &durLeer);
+    scanf("%d",  &durLeerEgoista);
 
-    infoBasica->cantLectores = numLectores;
-    procesosLectores = MC_Ctl_ptr + sizeof(struct InfoBasica);
+    infoBasica->cantEgoistas = numEgoistas;
+    procesosEgoistas = MC_Ctl_ptr + sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 200;
 
-    pthread_t hilosLectores[numLectores];
-    for (int i = 0; i < numLectores; i++) {
-        pthread_create(&hilosLectores[i], NULL, leer, i);
-        sleep(1);
+    sem_init(&semLecturaEgoista,1,1);
+
+    pthread_t hilosEgoistas[numEgoistas];
+    for (int i = 0; i < numEgoistas; i++) {
+        pthread_create(&hilosEgoistas[i], NULL, leerEgoista, i);
     }
     while(infoBasica->enJuego)
         sleep(1);
 
-    for (int i = 0; i < numLectores; i++) {
-        pthread_cancel(hilosLectores[i]);
+    for (int i = 0; i < numEgoistas; i++) {
+        pthread_cancel(hilosEgoistas[i]);
     }
+
+    printf("\nSe ha terminado la simluacion con el Terminador por lo que se han terminado los hilos de procesos lectores egoistas y con ello tambien terminara este proceso\n");
 
 }

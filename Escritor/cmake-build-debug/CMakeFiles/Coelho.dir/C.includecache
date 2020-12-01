@@ -6,25 +6,27 @@
 
 #IncludeRegexTransform: 
 
-/home/felipe/Desktop/Kraken/ReadersWriters/Escritor/main.c
-stdio.h
--
-pthread.h
--
-unistd.h
--
-stdio.h
--
-stdlib.h
--
+/home/jdtm23/Documents/ReadersWriters/Escritor/main.c
+../util.c
+/home/jdtm23/Documents/ReadersWriters/util.c
+
+/home/jdtm23/Documents/ReadersWriters/util.c
 sys/types.h
 -
 sys/ipc.h
 -
 sys/shm.h
 -
-memory.h
+stdio.h
+-
+stdlib.h
+-
+string.h
 -
 semaphore.h
+-
+pthread.h
+-
+zconf.h
 -
 

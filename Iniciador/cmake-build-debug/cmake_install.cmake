@@ -1,4 +1,4 @@
-# Install script for directory: /home/felipe/Desktop/Kraken/ReadersWriters/Iniciador
+# Install script for directory: /home/jdtm23/Documents/ReadersWriters/Iniciador
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/felipe/Desktop/Kraken/ReadersWriters/Iniciador/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/jdtm23/Documents/ReadersWriters/Iniciador/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,28 +1,8 @@
-#include  <sys/types.h>
-#include  <sys/ipc.h>
-#include  <sys/shm.h>
-#include  <stdio.h>
-#include <stdlib.h>
-#include  <string.h>
-#include <semaphore.h>
-#include <pthread.h>
-#include <zconf.h>
+#include "../util.c"
 
-char * ARCHIVO_DE_CONTROL="/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
-int TAM_LINEA = 100;
 char *MC_Ctl_ptr, *MC_ptr;
 
-struct InfoBasica {
-    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
-    sem_t semControl, semEgoista, semPrimerLector;
-};
-
 struct InfoBasica* infoBasica;
-
-struct HiloProceso{
-    pthread_t pid;
-    char estado;
-};
 
 void printLineasArchivo() {
     printf("\n ***** LINEAS DEL ARCHIVO ***** \n");
@@ -34,14 +14,14 @@ void printLineasArchivo() {
     }
 }
 
-void printProcesos(struct HiloProceso* procesos, int cantidad, char tipo, char *rw) {
+void printProcesos(struct HiloProceso* procesos, int cantidad, char tipo, char *rw, int debeImprimir) {
     int cant = 0;
     for (int i = 0; i < cantidad; i++) {
         if (procesos[i].estado == tipo) {
             cant++; printf("[PID %lu]: %s\n", procesos[i].pid, rw);
         }
     }
-    if (!cant) printf("%s\n", "(No hay)");
+    if (!cant && debeImprimir) printf("%s\n", "(No hay)");
 }
 
 void printEscritores() {
@@ -49,11 +29,11 @@ void printEscritores() {
     struct HiloProceso *procesosEscritores = MC_Ctl_ptr + sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 100;
 
     printf("\n + Escribiendo + \n");
-    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'E', "Escritor");
+    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'E', "Escritor", 1);
     printf("\n + Durmiendo + \n");
-    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'D', "Escritor");
+    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'D', "Escritor", 1);
     printf("\n + Bloqueados + \n");
-    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'B', "Escritor");
+    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'B', "Escritor", 1);
 }
 
 void printLectores() {
@@ -61,11 +41,11 @@ void printLectores() {
     struct HiloProceso *procesosLectores = MC_Ctl_ptr + sizeof(struct InfoBasica);
 
     printf("\n + Leyendo + \n");
-    printProcesos(procesosLectores, infoBasica->cantLectores, 'L', "Lector");
+    printProcesos(procesosLectores, infoBasica->cantLectores, 'L', "Lector", 1);
     printf("\n + Durmiendo + \n");
-    printProcesos(procesosLectores, infoBasica->cantLectores, 'D', "Lector");
+    printProcesos(procesosLectores, infoBasica->cantLectores, 'D', "Lector", 1);
     printf("\n + Bloqueados + \n");
-    printProcesos(procesosLectores, infoBasica->cantLectores, 'B', "Lector");
+    printProcesos(procesosLectores, infoBasica->cantLectores, 'B', "Lector", 1);
 }
 
 void printEgoistas() {
@@ -73,11 +53,34 @@ void printEgoistas() {
     struct HiloProceso *procesosEgoistas = MC_Ctl_ptr + sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 200;
 
     printf("\n + Leyendo y Borrando + \n");
-    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'X', "Lector Egoista");
+    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'X', "Lector Egoista", 1);
     printf("\n + Durmiendo + \n");
-    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'D', "Lector Egoista");
+    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'D', "Lector Egoista", 1);
     printf("\n + Bloqueados + \n");
-    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'B', "Lector Egoista");
+    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'B', "Lector Egoista", 1);
+
+}
+
+void printTodos() {
+    printf("\n ***** ESTADO DE TODOS LOS PROCESOS ***** \n");
+    struct HiloProceso *procesosEgoistas = MC_Ctl_ptr + sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 200;
+    struct HiloProceso *procesosLectores = MC_Ctl_ptr + sizeof(struct InfoBasica);
+    struct HiloProceso *procesosEscritores = MC_Ctl_ptr + sizeof(struct InfoBasica) + sizeof(struct HiloProceso) * 100;
+
+    printf("\n + Procesando el archivo + \n");
+    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'E', "Escritor", 0);
+    printProcesos(procesosLectores, infoBasica->cantLectores, 'L', "Lector", 0);
+    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'X', "Lector Egoista", 0);
+
+    printf("\n + Durmiendo + \n");
+    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'D', "Escritor", 0);
+    printProcesos(procesosLectores, infoBasica->cantLectores, 'D', "Lector", 0);
+    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'D', "Lector Egoista", 0);
+
+    printf("\n + Bloqueados + \n");
+    printProcesos(procesosEscritores, infoBasica->cantEscritores, 'B', "Escritor", 0);
+    printProcesos(procesosLectores, infoBasica->cantLectores, 'B', "Lector", 0);
+    printProcesos(procesosEgoistas, infoBasica->cantEgoistas, 'B', "Lector Egoista", 0);
 }
 
 void menuInfo() {
@@ -89,6 +92,7 @@ void menuInfo() {
     printf("2. Estado de los Escritores\n");
     printf("3. Estado de los Lectores\n");
     printf("4. Estado de los Lectores Egoistas\n");
+    printf("5. Estado de todos los procesos \n");
 }
 
 int main() {
@@ -109,7 +113,9 @@ int main() {
         printf("Digite la opcion: ");
         scanf("%i", &opcionEstado);
 
-        if (opcionEstado <= 0 || opcionEstado >= 5) {
+        if(!infoBasica->enJuego)
+            break;
+        if (opcionEstado <= 0 || opcionEstado >= 6) {
             printf("Opcion incorrecta. Intentelo de nuevo.\n");
             continue;
         }
@@ -120,9 +126,14 @@ int main() {
             printEscritores();
         else if (opcionEstado == 3)
             printLectores();
-        else
+        else if (opcionEstado == 4)
             printEgoistas();
+        else
+            printTodos();
     }
+
+    printf("\nSe ha terminado la simluacion con el Terminador por lo que se ha terminado el proceso espia.\nPuede consultar la bitacora de ejecucion en el siguiente archivo \"%s\"\n",ARCHIVO_BITACORA);
+
 
     return 0;
 }

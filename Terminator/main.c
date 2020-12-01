@@ -1,19 +1,5 @@
-#include  <sys/types.h>
-#include  <sys/ipc.h>
-#include  <sys/shm.h>
-#include  <stdio.h>
-#include <stdlib.h>
-#include  <string.h>
-#include <semaphore.h>
-#include <unistd.h>
+#include "../util.c"
 
-char * ARCHIVO_DE_CONTROL = "/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
-char * ARCHIVO_BITACORA = "/home/felipe/Desktop/Kraken/ReadersWriters/bitacora.txt";
-
-struct InfoBasica {
-    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
-    sem_t semControl, semEgoista, semPrimerLector;
-};
 int main() {
     int MC_Ctl_Id;
     FILE * fp = fopen (ARCHIVO_DE_CONTROL,"r");

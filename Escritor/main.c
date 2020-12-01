@@ -1,46 +1,10 @@
-#include <stdio.h>
-#include <pthread.h>
-#include <unistd.h>
-#include  <stdio.h>
-#include  <stdlib.h>
-#include  <sys/types.h>
-#include  <sys/ipc.h>
-#include  <sys/shm.h>
-#include <memory.h>
-#include <semaphore.h>
-
-int TAM_LINEA = 100, TRUE = 1, FALSE = 0;
-char * ARCHIVO_DE_CONTROL="/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
-
-struct InfoBasica {
-    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
-    sem_t semControl, semEgoista, semPrimerLector;
-};
-
-struct HiloProceso{
-    pthread_t pid;
-    char estado;
-};
+#include "../util.c"
 
 struct InfoBasica* infoBasica;
 struct HiloProceso* procesosEscritores;
 
-void *thread_function(void *);
-
-pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
-
 int durDormir, durEscribir, numEscritores;
 char * MC_ptr;
-
-char *getTime() {
-    char *s = malloc(100);
-    time_t tiempo;
-    struct tm * infoTiempo;
-    time( &tiempo );
-    infoTiempo = localtime( &tiempo );
-    snprintf(s, 100, "%02d:%02d:%02d", infoTiempo->tm_hour, infoTiempo->tm_min, infoTiempo->tm_sec);
-    return s;
-}
 
 void escribir(int i) {
     procesosEscritores[i].pid = pthread_self();
@@ -50,16 +14,27 @@ void escribir(int i) {
 
     do {
         procesosEscritores[i].estado = 'B';
+        sem_wait(&infoBasica->semContadorModificacion);
+        sem_wait(&infoBasica->semContadorNoEgoistas);
         sem_wait(&infoBasica->semControl);
 
         //region critica
+        sem_post(&infoBasica->semContadorNoEgoistas);
+        sem_post(&infoBasica->semContadorModificacion);
+        if(infoBasica->acumuladoEgoistas >= 3)
+            sem_post(&infoBasica->semEgoista);
+        infoBasica->acumuladoEgoistas=0;
+        if(infoBasica->primerLectorTermino) {
+            infoBasica->primerLectorTermino = FALSE;
+           sem_post(&infoBasica->semPrimerLector);
+        }
         numLineaResp = numLinea;
         procesosEscritores[i].estado = 'E';
 
-        sem_getvalue(&infoBasica->semPrimerLector, &valorPrimerLector);
+        /*sem_getvalue(&infoBasica->semPrimerLector, &valorPrimerLector);
         if( valorPrimerLector == 0)
             sem_post(&infoBasica->semPrimerLector);
-
+        */
 
         do {
             mem = MC_ptr + (TAM_LINEA * numLinea);
@@ -85,6 +60,10 @@ void escribir(int i) {
             snprintf(mensajeBitacora, 1000, "[%s] PID: %lu (Escritor) - Escribe \"%s\"\n", getTime(), pthread_self(), linea);
         }
         printf("%s", mensajeBitacora);
+
+        FILE * fp = fopen (ARCHIVO_BITACORA,"a");
+        fprintf(fp, "%s", mensajeBitacora);
+        fclose (fp);
 
         sem_post(&infoBasica->semControl);
 
@@ -127,7 +106,6 @@ int main() {
     pthread_t hilosEscritores[numEscritores];
     for (int i = 0; i < numEscritores; i++) {
         pthread_create(&hilosEscritores[i], NULL, escribir, i);
-        sleep(1);
     }
     while(infoBasica->enJuego)
         sleep(1);
@@ -135,5 +113,7 @@ int main() {
     for (int i = 0; i < numEscritores; i++) {
         pthread_cancel(hilosEscritores[i]);
     }
+
+    printf("\nSe ha terminado la simluacion con el Terminador por lo que se han terminado los hilos de procesos escritores y con ello tambien terminara este proceso\n");
 
 }

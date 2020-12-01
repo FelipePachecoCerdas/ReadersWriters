@@ -6,7 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/felipe/Desktop/Kraken/ReadersWriters/Terminator/main.c
+/home/jdtm23/Documents/ReadersWriters/Terminator/main.c
+../util.c
+/home/jdtm23/Documents/ReadersWriters/util.c
+
+/home/jdtm23/Documents/ReadersWriters/util.c
 sys/types.h
 -
 sys/ipc.h
@@ -21,6 +25,8 @@ string.h
 -
 semaphore.h
 -
-unistd.h
+pthread.h
+-
+zconf.h
 -
 

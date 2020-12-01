@@ -1,27 +1,7 @@
-#include <stdio.h>
-#include <pthread.h>
-#include <unistd.h>
-#include  <stdio.h>
-#include  <stdlib.h>
-#include  <sys/types.h>
-#include  <sys/ipc.h>
-#include  <sys/shm.h>
-#include <memory.h>
-#include <semaphore.h>
+#include "../util.c"
 
-int TAM_LINEA = 100, TRUE = 1, FALSE = 0, contadorLectores = 0, primerLector;
-char * ARCHIVO_DE_CONTROL="/home/felipe/Desktop/Kraken/ReadersWriters/idCtl.txt";
+int contadorLectores = 0, primerLector;
 sem_t semLectura;
-
-struct InfoBasica {
-    int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego;
-    sem_t semControl, semEgoista, semPrimerLector;
-};
-
-struct HiloProceso{
-    pthread_t pid;
-    char estado;
-};
 
 struct InfoBasica* infoBasica;
 struct HiloProceso* procesosLectores;
@@ -33,35 +13,33 @@ pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int durDormir, durLeer, numLectores;
 char * MC_ptr;
 
-char *getTime() {
-    char *s = malloc(100);
-    time_t tiempo;
-    struct tm * infoTiempo;
-    time( &tiempo );
-    infoTiempo = localtime( &tiempo );
-    snprintf(s, 100, "%02d:%02d:%02d", infoTiempo->tm_hour, infoTiempo->tm_min, infoTiempo->tm_sec);
-    return s;
-}
-
-void leer(int i) {
+_Noreturn void leer(int i) {
     procesosLectores[i].pid = pthread_self();
 
     char *mem, *linea = malloc(TAM_LINEA);
-    int numLinea = 0, numLineaResp;
+    int numLinea = 0, numLineaResp, contadorModificadores;
 
     do {
+        sem_getvalue(&infoBasica->semContadorModificacion,&contadorModificadores);
+        if( contadorModificadores!=200 && infoBasica->primerLectorTermino) {
+            sem_wait(&infoBasica->semPrimerLector);
+            sem_post(&infoBasica->semPrimerLector);
+        }
         procesosLectores[i].estado = 'B';
-        //sem_wait(&infoBasica->semPrimerLector);
         sem_wait(&semLectura);
         contadorLectores++;
         if(contadorLectores == 1) {
             primerLector = i;
+            sem_wait(&infoBasica->semContadorNoEgoistas);
             sem_wait(&infoBasica->semControl);
+            sem_post(&infoBasica->semContadorNoEgoistas);
         }
         sem_post(&semLectura);
-        //sem_post(&infoBasica->semPrimerLector);
 
         //region critica
+        if(infoBasica->acumuladoEgoistas >= 3)
+            sem_post(&infoBasica->semEgoista);
+        infoBasica->acumuladoEgoistas = 0;
         numLineaResp = numLinea;
         procesosLectores[i].estado = 'L';
 
@@ -86,9 +64,16 @@ void leer(int i) {
         // ESCBE EN BITACORA
 
         sem_wait(&semLectura);
+
+        FILE * fp = fopen (ARCHIVO_BITACORA,"a");
+        fprintf(fp, "%s", mensajeBitacora);
+        fclose (fp);
+
         contadorLectores--;
-        if(primerLector == i) 1;
-            //sem_wait(&infoBasica->semPrimerLector);
+        if(primerLector == i && !infoBasica->primerLectorTermino) {
+            infoBasica->primerLectorTermino = TRUE;
+            sem_wait(&infoBasica->semPrimerLector);
+        }
         if(contadorLectores==0)
             sem_post(&infoBasica->semControl);
         sem_post(&semLectura);
@@ -134,7 +119,6 @@ int main() {
     pthread_t hilosLectores[numLectores];
     for (int i = 0; i < numLectores; i++) {
         pthread_create(&hilosLectores[i], NULL, leer, i);
-        sleep(1); // NNOOOOOOOOOOOOOOOOOOOOO VAAAAAAAAAAAAAAA
     }
     while(infoBasica->enJuego)
         sleep(1);
@@ -142,6 +126,7 @@ int main() {
     for (int i = 0; i < numLectores; i++) {
         pthread_cancel(hilosLectores[i]);
     }
+
 
 
 }

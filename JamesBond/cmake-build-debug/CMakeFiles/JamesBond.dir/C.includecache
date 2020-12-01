@@ -6,7 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/felipe/Desktop/Kraken/ReadersWriters/JamesBond/main.c
+/home/jdtm23/Documents/ReadersWriters/JamesBond/main.c
+../util.c
+/home/jdtm23/Documents/ReadersWriters/util.c
+
+/home/jdtm23/Documents/ReadersWriters/util.c
 sys/types.h
 -
 sys/ipc.h
