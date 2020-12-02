@@ -21,9 +21,14 @@ void escribir(int i) {
         //region critica
         sem_post(&infoBasica->semContadorNoEgoistas);
         sem_post(&infoBasica->semContadorModificacion);
-        if(infoBasica->acumuladoEgoistas >= 3)
+        sem_wait(&infoBasica->semAcumuladoEgoistas); //W
+
+        if(infoBasica->acumuladoEgoistas >= 3) {
             sem_post(&infoBasica->semEgoista);
+        }
         infoBasica->acumuladoEgoistas=0;
+        sem_post(&infoBasica->semAcumuladoEgoistas);//P
+
         if(infoBasica->primerLectorTermino) {
             infoBasica->primerLectorTermino = FALSE;
            sem_post(&infoBasica->semPrimerLector);
@@ -114,6 +119,6 @@ int main() {
         pthread_cancel(hilosEscritores[i]);
     }
 
-    printf("\nSe ha terminado la simluacion con el Terminador por lo que se han terminado los hilos de procesos escritores y con ello tambien terminara este proceso\n");
+    printf("\nSe ha terminado la simulacion con el Terminador por lo que se han terminado los hilos de procesos escritores y con ello tambien terminara este proceso\n");
 
 }

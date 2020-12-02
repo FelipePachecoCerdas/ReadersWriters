@@ -1,0 +1,3 @@
+/home/jdtm23/Documents/ReadersWriters/Espia/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/jdtm23/Documents/ReadersWriters/Espia/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/jdtm23/Documents/ReadersWriters/Espia/cmake-build-debug/CMakeFiles/JamesBond.dir

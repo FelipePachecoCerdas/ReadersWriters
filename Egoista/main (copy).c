@@ -3,7 +3,7 @@
 struct InfoBasica* infoBasica;
 struct HiloProceso* procesosEgoistas;
 
-int durDormir, durLeerEgoista, numEgoistas, contadorEgoistas=0;
+int durDormir, durLeerEgoista, numEgoistas;
 char * MC_ptr;
 
 sem_t semLecturaEgoista;
@@ -18,18 +18,17 @@ void leerEgoista(int i) {
         procesosEgoistas[i].estado = 'B';
         sem_wait(&semLecturaEgoista);
 
-        contadorEgoistas++;
-        if(contadorEgoistas==3) {
+        //W
+        infoBasica->acumuladoEgoistas++;
+        if(infoBasica->acumuladoEgoistas>=3 ) {
+            //P
             sem_wait(&infoBasica->semEgoista);
-        }
-        if(contadorEgoistas>3 ) {
-            sem_wait(&infoBasica->semEgoista);
-            sem_wait(&infoBasica->semAcumuladoEgoistas); //W
-            if(infoBasica->acumuladoEgoistas==0)
-               contadorEgoistas=1;
-            sem_post(&infoBasica->semEgoista);
-            sem_post(&infoBasica->semAcumuladoEgoistas);//P
-        }
+            //W
+            if(infoBasica->acumuladoEgoistas==0){
+               contadorEgoistas=1
+            }
+            //P
+        }else //P
 
         sem_post(&semLecturaEgoista);
         sem_wait(&infoBasica->semContadorModificacion);
@@ -76,16 +75,15 @@ void leerEgoista(int i) {
         fprintf(fp, "%s", mensajeBitacora);
         fclose (fp);
 
-        sem_wait(&infoBasica->semAcumuladoEgoistas); //W
         infoBasica->acumuladoEgoistas++;
-        sem_post(&infoBasica->semAcumuladoEgoistas);//P
+
         sem_post(&infoBasica->semControl); //
 
-        sem_wait(&infoBasica->semAcumuladoEgoistas); //W
+        //W
         sem_getvalue(&infoBasica->semContadorNoEgoistas,&contadorNoEgoistas);
-        if(infoBasica->acumuladoEgoistas >= 3 && contadorNoEgoistas==101)
+        if(infoBasica->acumuladoEgoistas >= 3 && contadorEgoistas >= 3 && contadorNoEgoistas==101)
             sem_post(&infoBasica->semEgoista);
-        sem_post(&infoBasica->semAcumuladoEgoistas);//P
+        //P
 
         procesosEgoistas[i].estado = 'D';
         sleep(durDormir);
@@ -136,6 +134,6 @@ int main() {
         pthread_cancel(hilosEgoistas[i]);
     }
 
-    printf("\nSe ha terminado la simulacion con el Terminador por lo que se han terminado los hilos de procesos lectores egoistas y con ello tambien terminara este proceso\n");
+    printf("\nSe ha terminado la simluacion con el Terminador por lo que se han terminado los hilos de procesos lectores egoistas y con ello tambien terminara este proceso\n");
 
 }

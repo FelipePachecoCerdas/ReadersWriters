@@ -18,7 +18,7 @@ char * ARCHIVO_BITACORA = "/home/jdtm23/Documents/ReadersWriters/bitacora.txt";
 
 struct InfoBasica {
     int MC_Id, cantLineas,cantLectores,cantEscritores,cantEgoistas, acumuladoEgoistas, enJuego, primerLectorTermino;
-    sem_t semControl, semEgoista, semPrimerLector, semContadorModificacion, semContadorNoEgoistas;
+    sem_t semControl, semEgoista, semPrimerLector, semContadorModificacion, semContadorNoEgoistas, semAcumuladoEgoistas;
 };
 struct HiloProceso{
     pthread_t pid;

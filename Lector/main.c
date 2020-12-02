@@ -37,9 +37,13 @@ _Noreturn void leer(int i) {
         sem_post(&semLectura);
 
         //region critica
-        if(infoBasica->acumuladoEgoistas >= 3)
+        sem_wait(&infoBasica->semAcumuladoEgoistas); //W
+
+        if(infoBasica->acumuladoEgoistas >= 3) {
             sem_post(&infoBasica->semEgoista);
-        infoBasica->acumuladoEgoistas = 0;
+        }
+        infoBasica->acumuladoEgoistas=0;
+        sem_post(&infoBasica->semAcumuladoEgoistas);//P
         numLineaResp = numLinea;
         procesosLectores[i].estado = 'L';
 
@@ -127,6 +131,6 @@ int main() {
         pthread_cancel(hilosLectores[i]);
     }
 
-
+    printf("\nSe ha terminado la simulacion con el Terminador por lo que se han terminado los hilos de procesos lectores y con ello tambien terminara este proceso\n");
 
 }

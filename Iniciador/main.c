@@ -42,6 +42,7 @@ int main() {
     sem_init(&infoBasica->semControl, 1, 1);
     sem_init(&infoBasica->semEgoista, 1, 1);
     sem_init(&infoBasica->semPrimerLector, 1, 1);
+    sem_init(&infoBasica->semAcumuladoEgoistas, 1, 1);
     sem_init(&infoBasica->semContadorModificacion,1,200);
     sem_init(&infoBasica->semContadorNoEgoistas,1,101);
     infoBasica->primerLectorTermino=FALSE;
