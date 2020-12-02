@@ -74,10 +74,10 @@ _Noreturn void leer(int i) {
         fclose (fp);
 
         contadorLectores--;
-        if(primerLector == i && !infoBasica->primerLectorTermino) {
+        /*if(primerLector == i && !infoBasica->primerLectorTermino) {
             infoBasica->primerLectorTermino = TRUE;
             sem_wait(&infoBasica->semPrimerLector);
-        }
+        }*/
         if(contadorLectores==0)
             sem_post(&infoBasica->semControl);
         sem_post(&semLectura);
